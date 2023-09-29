@@ -1,0 +1,28 @@
+import PySimpleGUI as sg
+
+def chatbot_response(user_input):
+    # Replace this with your chatbot logic
+    response =  chain({"question": user_input}, return_only_outputs=True)
+    return response
+
+sg.theme("LightBlue1")
+
+layout = [
+    [sg.Text("Chatbot", font=("Helvetica", 20))],
+    [sg.Text("Enter your question:"), sg.InputText(key='-INPUT-', size=(30, 1)), sg.Button("Submit")],
+    [sg.Multiline("", key='-OUTPUT-', size=(40, 10))],
+    [sg.Button("Exit")]
+]
+
+window = sg.Window("Chatbot", layout)
+
+while True:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED or event == "Exit":
+        break
+    if event == "Submit":
+        user_input = values['-INPUT-']
+        response = chatbot_response(user_input)
+        window['-OUTPUT-'].print(f"User: {user_input}\nChatbot: {response}\n", text_color='black')
+        window['-INPUT-'].update('')
+window.close()
